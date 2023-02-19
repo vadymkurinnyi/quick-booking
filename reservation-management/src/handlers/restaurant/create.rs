@@ -8,7 +8,6 @@ use actix_web::{
     web::{self, Json},
 };
 use aws_sdk_dynamodb::{model::AttributeValue, Client};
-use chrono::NaiveTime;
 use serde::Deserialize;
 use uuid::Uuid;
 
@@ -17,8 +16,6 @@ pub async fn create(
     db: web::Data<Client>,
     restaurant: web::Json<CreateRestaurant>,
 ) -> Result<Uuid> {
-    println!("start");
-    dbg!(serde_json::to_string(&NaiveTime::from_hms_opt(10, 30, 0)));
     let id = Uuid::new_v4();
     let CreateRestaurant {
         name,

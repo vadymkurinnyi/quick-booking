@@ -1,14 +1,16 @@
-use serde::Deserialize;
+use derive_builder::Builder;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-pub struct Resaurant {
+#[derive(Serialize, Builder)]
+pub struct Restaurant {
     pub id: Uuid,
     pub name: String,
     pub address: String,
     pub settings: ReservationSettings,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize, Clone, Builder)]
 pub struct ReservationSettings {
     pub max_days: u32,
     pub max_booking_time: u32,
@@ -16,7 +18,7 @@ pub struct ReservationSettings {
 }
 
 use chrono::NaiveTime;
-#[derive(PartialEq, Eq, Deserialize)]
+#[derive(PartialEq, Eq, Deserialize, Serialize, Clone)]
 pub struct TimeSlot {
     pub time: NaiveTime,
 }
