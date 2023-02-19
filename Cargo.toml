@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "reservation-management",
+    # "availability-management",
+    "customer-service",
+]
