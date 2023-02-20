@@ -8,6 +8,7 @@ use thiserror::Error;
 mod api;
 mod protocol;
 pub mod repo;
+pub mod tables;
 type Result<T> = core::result::Result<Json<T>, RestaurnatError>;
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
@@ -15,7 +16,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
         web::scope("/restaurant")
             .service(api::create)
             .service(api::get)
-            .service(api::update),
+            .service(api::update)
+            .service(tables::api::create),
     );
 }
 

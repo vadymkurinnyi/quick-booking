@@ -31,6 +31,9 @@ pub async fn get(id: Path<Uuid>, db: Repo) -> Result<Restaurant> {
 }
 
 #[patch("/{id}")]
-pub async fn update(id: Path<Uuid>, pth: web::Json<Patch>, db: Repo) -> Result<Restaurant> {
-    todo!()
+pub async fn update(id: Path<Uuid>, pth: web::Json<Patch>, db: Repo) -> Result<()> {
+    db.update(id.into_inner(), pth.into_inner())
+        .await
+        .map_err(RestaurnatError::Internal)?;
+    Ok(Json(()))
 }
