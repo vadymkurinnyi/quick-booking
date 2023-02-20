@@ -5,15 +5,17 @@ use actix_web::{
 use derive_more::Display;
 use thiserror::Error;
 
-mod create;
-mod get;
+mod api;
+mod protocol;
+pub mod repo;
 type Result<T> = core::result::Result<Json<T>, RestaurnatError>;
 
 pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/restaurant")
-            .service(create::create)
-            .service(get::get),
+            .service(api::create)
+            .service(api::get)
+            .service(api::update),
     );
 }
 
@@ -21,7 +23,7 @@ use crate::models::restaurant::ReservationSettingsBuilderError;
 use crate::models::restaurant::RestaurantBuilderError;
 #[derive(Debug, Error, Display)]
 pub enum RestaurnatError {
-    Internal,
+    Internal(Box<dyn std::error::Error>),
     ReservationSettingsBuilderError(#[from] ReservationSettingsBuilderError),
     RestaurantBuilderError(#[from] RestaurantBuilderError),
     ParseIntError(#[from] std::num::ParseIntError),

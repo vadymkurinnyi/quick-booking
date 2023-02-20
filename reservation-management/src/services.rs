@@ -3,6 +3,8 @@ use std::sync::Arc;
 use actix_web::web::{self, Data};
 use aws_sdk_dynamodb::Client;
 
+use crate::restaurant::repo::{RestaurantRepo, RestaurantRepoDynamoDb};
+
 pub mod dynamo_db;
 
 pub struct Services {
@@ -14,7 +16,10 @@ impl Services {
     }
 }
 pub fn add_services(cfg: &mut web::ServiceConfig, state: Arc<Services>) {
-    cfg.app_data(state.get_client());
+    let restaurant_repo: Box<dyn RestaurantRepo> =
+        Box::new(RestaurantRepoDynamoDb::new(state.get_client()));
+
+    cfg.app_data(Data::new(restaurant_repo));
 }
 
 pub async fn configure_services() -> Arc<Services> {
@@ -23,5 +28,6 @@ pub async fn configure_services() -> Arc<Services> {
         .await
         .expect("Db not set");
     let client = Data::new(dynamo_db);
+
     Arc::new(Services { client })
 }

@@ -3,6 +3,7 @@ use anyhow::Ok;
 
 mod handlers;
 pub mod models;
+mod restaurant;
 mod services;
 
 #[tokio::main]
@@ -13,7 +14,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
     Ok(HttpServer::new(move || {
         App::new()
-            .configure(handlers::add_handlers)
+            .configure(restaurant::configure)
             .configure(|cfg| services::add_services(cfg, app_state.clone()))
     })
     .bind(("127.0.0.1", 8080))?
